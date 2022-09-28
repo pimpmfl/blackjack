@@ -23,7 +23,7 @@ const playerCardSlot = document.querySelector(".player-card-slot")
 const secondPlayerCardSlot = document.querySelector(".player-card-slot2")
 
 const computerDeckElement = document.querySelector(".computer-deck")
-const playerDeckElement = document.querySelector(".player-deck")
+
 const text = document.querySelector(".text")
 
 let inRound, stop;
@@ -110,7 +110,6 @@ function flipCards() {
 
 function updateDeckCount() {
   computerDeckElement.innerText = deckOfCards.numberOfCards
-  playerDeckElement.innerText = deckOfCards.numberOfCards
 }
 
 function isRoundWinner(playerCard, playerSecondCard, computerCard, computerSecondCard) {
