@@ -1,4 +1,5 @@
-const SUITS = ["♠", "♣", "♥", "♦"]
+// S = Spade; C = Clubs; H = Hearts; D = Diamonds
+const SUITS = ["S", "C", "H", "D"]
 const VALUES = [
   "A",
   "2",
@@ -49,12 +50,12 @@ class Card {
   }
 
   get color() {
-    return this.suit === "♣" || this.suit === "♠" ? "black" : "red"
+    return this.suit === "C" || this.suit === "S" ? "black" : "red"
   }
 
   getHTML() {
     const cardDiv = document.createElement("div")
-    cardDiv.innerText = this.suit
+    cardDiv.innerText = this.value
     cardDiv.classList.add("card", this.color)
     cardDiv.dataset.value = `${this.value} ${this.suit}`
     return cardDiv
