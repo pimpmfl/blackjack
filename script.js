@@ -17,12 +17,17 @@ const CARD_VALUE_MAP = {
 }
 
 const computerCardSlot = document.querySelector(".computer-card-slot")
+const secondComputerCardSlot = document.querySelector(".computer-card-slot2")
+
 const playerCardSlot = document.querySelector(".player-card-slot")
+const secondPlayerCardSlot = document.querySelector(".player-card-slot2")
+
 const computerDeckElement = document.querySelector(".computer-deck")
 const playerDeckElement = document.querySelector(".player-deck")
 const text = document.querySelector(".text")
 
-let playerDeck, computerDeck, inRound, stop
+let inRound, stop;
+let deckOfCards = new Deck(); 
 
 document.addEventListener("click", () => {
   if (stop) {
@@ -39,12 +44,8 @@ document.addEventListener("click", () => {
 
 startGame()
 function startGame() {
-  const deck = new Deck()
-  deck.shuffle()
-
-  const deckMidpoint = Math.ceil(deck.numberOfCards / 2)
-  playerDeck = new Deck(deck.cards.slice(0, deckMidpoint))
-  computerDeck = new Deck(deck.cards.slice(deckMidpoint, deck.numberOfCards))
+    
+  deckOfCards.shuffle()
   inRound = false
   stop = false
 
@@ -54,7 +55,11 @@ function startGame() {
 function cleanBeforeRound() {
   inRound = false
   computerCardSlot.innerHTML = ""
+  secondComputerCardSlot.innerHTML = ""
+
   playerCardSlot.innerHTML = ""
+  secondPlayerCardSlot.innerHTML = ""
+
   text.innerText = ""
 
   updateDeckCount()
@@ -63,46 +68,55 @@ function cleanBeforeRound() {
 function flipCards() {
   inRound = true
 
-  const playerCard = playerDeck.pop()
-  const computerCard = computerDeck.pop()
+  const playerCard = deckOfCards.pop()
+  const playerSecondCard = deckOfCards.pop()
+
+  const computerCard = deckOfCards.pop()
+  const computerSecondCard = deckOfCards.pop()
 
   playerCardSlot.appendChild(playerCard.getHTML())
+  secondPlayerCardSlot.appendChild(playerSecondCard.getHTML())
+
   computerCardSlot.appendChild(computerCard.getHTML())
+  secondComputerCardSlot.appendChild(computerSecondCard.getHTML())
 
   updateDeckCount()
 
-  if (isRoundWinner(playerCard, computerCard)) {
-    text.innerText = "Win"
-    playerDeck.push(playerCard)
-    playerDeck.push(computerCard)
-  } else if (isRoundWinner(computerCard, playerCard)) {
-    text.innerText = "Lose"
-    computerDeck.push(playerCard)
-    computerDeck.push(computerCard)
+  if (isRoundWinner(playerCard, playerSecondCard, computerCard, computerSecondCard)) {
+    text.innerText = "Player won."
+    deckOfCards.push(playerCard)
+    deckOfCards.push(playerSecondCard)
+    
+    deckOfCards.push(computerCard)
+    deckOfCards.push(computerSecondCard)
+
+  } else if (!isRoundWinner(playerCard, playerSecondCard, computerCard, computerSecondCard)) {
+    text.innerText = "Computer won."
+    deckOfCards.push(playerCard)
+    deckOfCards.push(playerSecondCard)
+
+    deckOfCards.push(computerCard)
+    deckOfCards.push(computerSecondCard)
+
   } else {
     text.innerText = "Draw"
-    playerDeck.push(playerCard)
-    computerDeck.push(computerCard)
-  }
+    deckOfCards.push(playerCard)
+    deckOfCards.push(playerSecondCard)
 
-  if (isGameOver(playerDeck)) {
-    text.innerText = "You Lose!!"
-    stop = true
-  } else if (isGameOver(computerDeck)) {
-    text.innerText = "You Win!!"
-    stop = true
+    deckOfCards.push(computerCard)
+    deckOfCards.push(computerSecondCard)
   }
 }
 
 function updateDeckCount() {
-  computerDeckElement.innerText = computerDeck.numberOfCards
-  playerDeckElement.innerText = playerDeck.numberOfCards
+  computerDeckElement.innerText = deckOfCards.numberOfCards
+  playerDeckElement.innerText = deckOfCards.numberOfCards
 }
 
-function isRoundWinner(cardOne, cardTwo) {
-  return CARD_VALUE_MAP[cardOne.value] > CARD_VALUE_MAP[cardTwo.value]
-}
-
-function isGameOver(deck) {
-  return deck.numberOfCards === 0
+function isRoundWinner(playerCard, playerSecondCard, computerCard, computerSecondCard) {
+  let playerSum = CARD_VALUE_MAP[playerCard.value] + CARD_VALUE_MAP[playerSecondCard.value];
+  let computerSum = CARD_VALUE_MAP[computerCard.value] + CARD_VALUE_MAP[computerSecondCard.value];
+  console.log(`playerSum = ${playerSum}`)
+  console.log(`computerSum = ${computerSum}`)
+  return playerSum > computerSum
 }
