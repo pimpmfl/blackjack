@@ -54,9 +54,9 @@ class Card {
   }
 
   getHTML() {
-    const cardDiv = document.createElement("div")
-    cardDiv.innerText = this.value
-    cardDiv.classList.add("card", this.color)
+    const cardDiv = document.createElement("img")
+    cardDiv.src = `./deckimg/${this.value}${this.suit}.png`
+    cardDiv.classList.add("card")
     cardDiv.dataset.value = `${this.value} ${this.suit}`
     return cardDiv
   }
