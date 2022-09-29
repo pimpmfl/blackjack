@@ -4,7 +4,8 @@ var dealerSum = 0;
 var playerSum = 0; 
 var dealerAceCount = 0;
 var playerAceCount = 0;
-var canHit = true;  
+var canHit = true;
+var canStay = true;   
 var deck;  
 
 startGame();
@@ -40,14 +41,19 @@ function newGame() {
   var dealerCards = document.getElementById("dealer-cards");
   dealerCards.innerText = "";
   var hiddenImg = document.createElement("img");
+  hiddenImg.id = "hidden";
   hiddenImg.src = `./deckimg/backcard.png`;
   dealerCards.append(hiddenImg);
+  
   dealerSum = 0;
   playerSum = 0;
+  canHit = true;
+  canStay = true;   
+  
   document.getElementById("player-cards").innerText = "";
   document.getElementById("player-sum").innerText = ""; 
   document.getElementById("dealer-sum").innerText = ""; 
-  canHit = true;  
+  
   updateScore(); 
   startGame();
 }
@@ -61,11 +67,18 @@ function hit() {
   document.getElementById("player-cards").append(cardImg);
   playerSum += getValue(playerCard);
   updateScore(); 
+  if(playerSum >= 21) {
+    stay();
+  } 
+  
 }
 
 function stay() {
   canHit = false;
-  dealersTurn(); 
+  if(canStay) {
+    dealersTurn();
+  }
+  canStay = false;  
 }
 
 function double() {
@@ -76,10 +89,6 @@ function double() {
 function updateScore() {
   document.getElementById("dealer-sum").innerText = dealerSum;
   document.getElementById("player-sum").innerText = playerSum;
-
-  if(playerSum >= 21) {
-    stay();
-  } 
 }
 
 function getValue(card) {
@@ -97,7 +106,6 @@ function dealersTurn() {
   var hiddenCard = deck.pop();
   console.log("hidden card: " + hiddenCard.value + hiddenCard.suit);
   var setHidden = document.getElementById("hidden");
-  setHidden.src = "";
   setHidden.src = `./deckimg/${hiddenCard.value}${hiddenCard.suit}.png`;
   dealerSum += getValue(hiddenCard);
   updateScore();
@@ -108,6 +116,8 @@ function dealersTurn() {
     cardImg.src = `./deckimg/${dealerCard.value}${dealerCard.suit}.png`
     document.getElementById("dealer-cards").append(cardImg); 
     dealerSum += getValue(dealerCard);
-    updateScore();
   }
+  
+  updateScore();
+
 }
