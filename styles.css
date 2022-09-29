@@ -1,85 +1,51 @@
-*, *::after, *::before { 
-    box-sizing: border-box;
-  }
-  
-  body {
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 4rem);
-    grid-template-rows: 7rem 2rem 7rem;
-    grid-gap: 2rem;
-    cursor: pointer;
-    justify-content: center;
-    padding-top: 1rem;
-  }
-  
-  .deck {
-    height: 120%;
-    width: 120%;
-    border: 1px solid black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3rem;
-    border-radius: .5rem;
-    color: white;
-    user-select: none;
-  }
-  
-  .computer-deck {
-    
-  }
-  
-  .player-deck {
-    height: 0%;
-    width: 0%; 
-    border-radius: 0rem; 
-    border: 0px; 
-  }
-  
-  .text {
-    grid-column: span 3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-  }
-  
-  .card {
-    position: relative;
-    height: 120%;
-    width: 120%;
-    border: 1px solid black;
-    border-radius: .5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3rem;
-    user-select: none; 
-  }
-  
-  .card.red {
-    color: red;
-  }
-  
-  .card.black {
-    color: black;
-  }
-  
-  .card::before,
-  .card::after {
-    position: absolute;
-    content: attr(data-value);
-    font-size: 1rem;
-  }
-  
-  .card::before {
-    top: .5rem;
-    left: .5rem
-  }
-  
-  .card::after {
-    bottom: .5rem;
-    right: .5rem;
-    transform: rotate(180deg);
-  }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  user-select: none;
+}
+
+#dealer-cards img {
+  height: 175px;
+  width: 125px;
+  margin: 1px;
+  user-select: none;
+}
+
+#player-cards img {
+  height: 175px;
+  width: 125px;
+  margin: 1px;
+  user-select: none;
+}
+
+#hit {
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+  user-select: none;
+}
+
+#stay {
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+  user-select: none;
+
+}
+
+#new {
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+  user-select: none;
+
+}
+
+#double {
+  width: 100px;
+  height: 50px;
+  font-size: 20px;
+  user-select: none;
+
+}
+
