@@ -29,6 +29,10 @@ function startGame() {
  }
  
  updateScore();
+ if(playerSum >= 21) {
+  stay();
+  return; 
+  } 
 
  document.getElementById("new").addEventListener("click", newGame);
  document.getElementById("hit").addEventListener("click", hit);
@@ -67,9 +71,11 @@ function hit() {
   document.getElementById("player-cards").append(cardImg);
   playerSum += getValue(playerCard);
   updateScore(); 
+
   if(playerSum >= 21) {
     stay();
   } 
+  
   
 }
 
