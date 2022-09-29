@@ -9,14 +9,21 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="preload" href="styles.css" as="style">
 </head>
+
 <body>
-  <img class="computer-deck deck" src="./deckimg/backcard.png" alt="">
-  <div class="computer-card-slot card-slot"></div>
-  <div class="computer-card-slot2 card-slot"></div>
-  <div class="text"></div>
-  <div class="player-deck deck"></div>
-  <div class="player-card-slot card-slot"></div>
-  <div class="player-card-slot2 card-slot"></div>
+  <h2>Dealer: <span id="dealer-sum"></span></h2>
+  <div id="dealer-cards">
+    <img id="hidden" src="./deckimg/backcard.png">
+  </div>
+
+  <h2>You: <span id="player-sum"></span></h2>
+  <div id="player-cards"></div>
+  
+  <br>
+  <button id="double">Double</button>
+  <button id="hit">Hit</button>
+  <button id="stay">Stay</button>
+  <button id="new">New</button>
 
 </body>
 </html>
