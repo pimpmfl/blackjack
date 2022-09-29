@@ -1,4 +1,4 @@
-// S = Spade; C = Clubs; H = Hearts; D = Diamonds
+// S = Spades; C = Clubs; H = Hearts; D = Diamonds
 const SUITS = ["S", "C", "H", "D"]
 const VALUES = [
   "A",
@@ -51,14 +51,6 @@ class Card {
 
   get color() {
     return this.suit === "C" || this.suit === "S" ? "black" : "red"
-  }
-
-  getHTML() {
-    const cardDiv = document.createElement("img")
-    cardDiv.src = `./deckimg/${this.value}${this.suit}.png`
-    cardDiv.classList.add("card")
-    cardDiv.dataset.value = `${this.value} ${this.suit}`
-    return cardDiv
   }
 }
 
