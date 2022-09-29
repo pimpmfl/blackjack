@@ -1,121 +1,113 @@
 import Deck from "./deck.js"
 
-const CARD_VALUE_MAP = {
-  "2": 2,
-  "3": 3,
-  "4": 4,
-  "5": 5,
-  "6": 6,
-  "7": 7,
-  "8": 8,
-  "9": 9,
-  "10": 10,
-  J: 11,
-  Q: 12,
-  K: 13,
-  A: 14
-}
+var dealerSum = 0;
+var playerSum = 0; 
+var dealerAceCount = 0;
+var playerAceCount = 0;
+var canHit = true;  
+var deck;  
 
-const computerCardSlot = document.querySelector(".computer-card-slot")
-const secondComputerCardSlot = document.querySelector(".computer-card-slot2")
+startGame();
 
-const playerCardSlot = document.querySelector(".player-card-slot")
-const secondPlayerCardSlot = document.querySelector(".player-card-slot2")
-
-const computerDeckElement = document.querySelector(".computer-deck")
-
-const text = document.querySelector(".text")
-
-let inRound, stop;
-let deckOfCards = new Deck(); 
-
-document.addEventListener("click", () => {
-  if (stop) {
-    startGame()
-    return
-  }
-
-  if (inRound) {
-    cleanBeforeRound()
-  } else {
-    flipCards()
-  }
-})
-
-startGame()
 function startGame() {
-    
-  deckOfCards.shuffle()
-  inRound = false
-  stop = false
+ deck = new Deck();
+ deck.shuffle();
+ var cardImg = document.createElement("img");
+ var dealerCard = deck.pop();
+ cardImg.src = `./deckimg/${dealerCard.value}${dealerCard.suit}.png`
+ document.getElementById("dealer-cards").append(cardImg); 
+ dealerSum += getValue(dealerCard);
+ 
+ 
+ for(let i = 0; i < 2; i++) {
+  var playerCardImg = document.createElement("img");
+  var playerCard = deck.pop();
+  playerCardImg.src = `./deckimg/${playerCard.value}${playerCard.suit}.png`
+  document.getElementById("player-cards").append(playerCardImg);
+  playerSum += getValue(playerCard);
+ }
+ 
+ updateScore();
 
-  cleanBeforeRound()
+ document.getElementById("new").addEventListener("click", newGame);
+ document.getElementById("hit").addEventListener("click", hit);
+ document.getElementById("stay").addEventListener("click", stay);
+ document.getElementById("double").addEventListener("click", double);
+
 }
 
-function cleanBeforeRound() {
-  inRound = false
-  computerCardSlot.innerHTML = ""
-  secondComputerCardSlot.innerHTML = ""
-
-  playerCardSlot.innerHTML = ""
-  secondPlayerCardSlot.innerHTML = ""
-
-  text.innerText = ""
-
-  updateDeckCount()
+function newGame() {
+  var dealerCards = document.getElementById("dealer-cards");
+  dealerCards.innerText = "";
+  var hiddenImg = document.createElement("img");
+  hiddenImg.src = `./deckimg/backcard.png`;
+  dealerCards.append(hiddenImg);
+  dealerSum = 0;
+  playerSum = 0;
+  document.getElementById("player-cards").innerText = "";
+  document.getElementById("player-sum").innerText = ""; 
+  document.getElementById("dealer-sum").innerText = ""; 
+  canHit = true;  
+  updateScore(); 
+  startGame();
 }
 
-function flipCards() {
-  inRound = true
+function hit() { 
+  if(!canHit) return;
+  
+  var cardImg = document.createElement("img");
+  let playerCard = deck.pop();
+  cardImg.src = `./deckimg/${playerCard.value}${playerCard.suit}.png`
+  document.getElementById("player-cards").append(cardImg);
+  playerSum += getValue(playerCard);
+  updateScore(); 
+}
 
-  const playerCard = deckOfCards.pop()
-  const playerSecondCard = deckOfCards.pop()
+function stay() {
+  canHit = false;
+  dealersTurn(); 
+}
 
-  const computerCard = deckOfCards.pop()
-  const computerSecondCard = deckOfCards.pop()
+function double() {
+  hit();
+  stay();
+}
 
-  playerCardSlot.appendChild(playerCard.getHTML())
-  secondPlayerCardSlot.appendChild(playerSecondCard.getHTML())
+function updateScore() {
+  document.getElementById("dealer-sum").innerText = dealerSum;
+  document.getElementById("player-sum").innerText = playerSum;
 
-  computerCardSlot.appendChild(computerCard.getHTML())
-  secondComputerCardSlot.appendChild(computerSecondCard.getHTML())
+  if(playerSum >= 21) {
+    stay();
+  } 
+}
 
-  updateDeckCount()
-
-  if (isRoundWinner(playerCard, playerSecondCard, computerCard, computerSecondCard)) {
-    text.innerText = "Player won."
-    deckOfCards.push(playerCard)
-    deckOfCards.push(playerSecondCard)
-    
-    deckOfCards.push(computerCard)
-    deckOfCards.push(computerSecondCard)
-
-  } else if (!isRoundWinner(playerCard, playerSecondCard, computerCard, computerSecondCard)) {
-    text.innerText = "Computer won."
-    deckOfCards.push(playerCard)
-    deckOfCards.push(playerSecondCard)
-
-    deckOfCards.push(computerCard)
-    deckOfCards.push(computerSecondCard)
-
-  } else {
-    text.innerText = "Draw"
-    deckOfCards.push(playerCard)
-    deckOfCards.push(playerSecondCard)
-
-    deckOfCards.push(computerCard)
-    deckOfCards.push(computerSecondCard)
+function getValue(card) {
+  var cardValue = parseInt(card.value);
+  if(isNaN(cardValue)) {
+    if(card.value == 'A') {
+      return 11; 
+    }
+    return 10; 
   }
+  return cardValue; 
 }
 
-function updateDeckCount() {
-  computerDeckElement.innerText = deckOfCards.numberOfCards
-}
+function dealersTurn() {
+  var hiddenCard = deck.pop();
+  console.log("hidden card: " + hiddenCard.value + hiddenCard.suit);
+  var setHidden = document.getElementById("hidden");
+  setHidden.src = "";
+  setHidden.src = `./deckimg/${hiddenCard.value}${hiddenCard.suit}.png`;
+  dealerSum += getValue(hiddenCard);
+  updateScore();
 
-function isRoundWinner(playerCard, playerSecondCard, computerCard, computerSecondCard) {
-  let playerSum = CARD_VALUE_MAP[playerCard.value] + CARD_VALUE_MAP[playerSecondCard.value];
-  let computerSum = CARD_VALUE_MAP[computerCard.value] + CARD_VALUE_MAP[computerSecondCard.value];
-  console.log(`playerSum = ${playerSum}`)
-  console.log(`computerSum = ${computerSum}`)
-  return playerSum > computerSum
+  while(dealerSum < 17) {
+    var cardImg = document.createElement("img");
+    var dealerCard = deck.pop();
+    cardImg.src = `./deckimg/${dealerCard.value}${dealerCard.suit}.png`
+    document.getElementById("dealer-cards").append(cardImg); 
+    dealerSum += getValue(dealerCard);
+    updateScore();
+  }
 }
