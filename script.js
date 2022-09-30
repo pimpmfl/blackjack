@@ -40,6 +40,7 @@ function startGame() {
   canStay = false;
   winResult = false;  
   document.getElementById("result").innerText = "BLACKJACK!!!";
+  dealersTurn();
   return; 
   } 
 
@@ -153,7 +154,9 @@ function dealersTurn() {
   
   updateScore();
   var result = winner(playerSum, dealerSum)
-  document.getElementById("result").innerHTML = result;
+  if(winResult) {
+    document.getElementById("result").innerHTML = result;
+  }
 }
 
 function checkAces(card) {
